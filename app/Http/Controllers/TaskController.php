@@ -15,12 +15,18 @@ class TaskController extends Controller
 
     public function store(Request $request)
     {
-        Task::create([
-            'title' => $request->title,
-            'description' => $request->description
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string'
         ]);
 
-        return back();
+        Task::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'status' => 'pending'
+        ]);
+
+        return redirect()->route('tasks.index');
     }
 
     public function destroy($id)
